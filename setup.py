@@ -6,11 +6,11 @@ with open('VERSION.txt') as f:
 
 
 setup(
-    name='my_module',
+    name='django_hosted_chrome_extension',
     version=version,
-    url='https://my_url',
+    url='https://github.com/matix-io/django-hosted-chrome-extension',
     license='MIT',
-    description='Project description',
+    description='Drop-in module for a privately hosted chrome extension.',
     long_description='',
     author='Connor Bode',
     author_email='connor@matix.io',

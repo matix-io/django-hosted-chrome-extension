@@ -1,29 +1,46 @@
-# pip boilerplate
+# Django Hosted Chrome Extension
 
-How do you publish this shit?
+This project serves two purposes:
 
-1. Clone this repo.
-1. Change the git remote for this repo, so you don't overwrite the boilerplate.
-2. `pip install -r requirements.txt`
-2. Rename the `my_module` folder to whatever you want, and put your module there. This folder name is the name of the import that will be used in Python (e.g. `import my_module`).
-3. Make sure `__init__.py` contains everything you want to export.
-4. Edit `setup.py`; replace the `name='my_module'` with whatever your module name is, then edit description, etc. This module name is what will be published on pypi, so if you set `name='django_custom_module'`, you can install via `pip install django-custom-module`.
-5. Edit README.md - this is what shows up as the project readme.
-5. Edit `release.sh`, changing the `twine upload ...` command.
-5. `bash release.sh` to release; version stuff is included in that script.
+1. Allow people to download the latest version of a private Chrome extension.
+2. Provide an update server for that Chrome extension, so that the latest version is automatically downloaded.
 
-Good luck!
+** This is for Chrome Extensions that are NOT hosted on the Chrome Web Store. **
 
-# Including non-python files in the archive
+## Installation
 
-If you need to include non-Python files, edit `MANIFEST.in` use the `include` directive.
+### 1. Install via pip.
 
-For example:
+`pip install django-hosted-chrome-extension`
+
+### 2. Set up your project
+
+In your main `urls.py`, you need to include the URLs.
 
 ```
-include *.txt
-include balloon_block_editor/static/balloon_block_editor/ckeditor.js
-include balloon_block_editor/templates/balloon_block_editor/widget.html
+from django.urls import path, include
+
+urlpatters = [
+    path('chrome-extension/', include('hosted_chrome_extension.urls', namespace='chrome-extension')),
+]
 ```
 
-This is something I used to make sure the .js and .html files were included in the archive.
+In your `settings.py`, add `hosted_chrome_extension` to `INSTALLED_APPS`
+
+In your `settings.py`, add the following:
+
+```
+# the URL for your site
+HOSTED_CHROME_EXTENSION_BASE_URL = 'https://yoursite.com'
+
+# your extension's app id, see here: https://developer.chrome.com/apps/autoupdate#update_manifest
+HOSTED_CHROME_EXTENSION_APP_ID = 'your app id'
+```
+
+## Usage 
+
+In Django Admin, you'll be able to upload new versions of the extension. Extensions should have a major version, a minor version, and a patch version (e.g. 1.0.1).
+
+You can direct users to download the latest version of the extension with `{% url 'chrome-extension:latest' %}`.
+
+In the Chrome Extension's `manifest.json`, you can set the `update_url` key to `https://yoursite.com/chrome-extension/updates/`.

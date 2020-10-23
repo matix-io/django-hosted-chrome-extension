@@ -5,3 +5,5 @@ __pycache__
 env.sh
 /dist
 *.egg-info
+media
+db.sqlite3
